@@ -67,4 +67,26 @@
 <img width="1213" height="606" alt="image" src="https://github.com/user-attachments/assets/fa9078a6-2d91-403d-b5e7-cc4ba2e6adf6" />
 <img width="836" height="585" alt="image" src="https://github.com/user-attachments/assets/acebd002-4052-4164-b6c9-9a5060cc7426" />
 
+# GET w/ Pagination
+
+    // GET with Pagination
+    @GetMapping("/books/paginated")
+    public ResponseEntity<List<Book>> getBooksPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size
+    ){
+        int start = page * size;
+        int end = Math.min(start + size, books.size());
+
+        if (start >= books.size()) {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+
+        List<Book> paginatedBooks = books.subList(start, end);
+
+        return ResponseEntity.ok(paginatedBooks);
+    }
+
+<img width="712" height="718" alt="image" src="https://github.com/user-attachments/assets/ea94a443-bafa-4350-99e5-cec6081756d1" />
+
 
