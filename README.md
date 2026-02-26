@@ -89,4 +89,68 @@
 
 <img width="712" height="718" alt="image" src="https://github.com/user-attachments/assets/ea94a443-bafa-4350-99e5-cec6081756d1" />
 
+# GET Advanced
+    // Get w/ Filtering, Sorting, and Pagination
+
+    @GetMapping("/books/advanced")
+    public ResponseEntity<Map<String, Object>> getBooksAdvanced(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(defaultValue = "title") String sortby,
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        List<Book> filtered = books.stream()
+                .filter(book -> title == null || book.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .filter(book -> author == null || book.getAuthor().toLowerCase().contains(author.toLowerCase()))
+                .filter(book -> minPrice == null || book.getPrice() >= minPrice)
+                .filter(book -> maxPrice == null || book.getPrice() <= maxPrice)
+                .collect(Collectors.toList());
+
+        Comparator<Book> comparator;
+
+        switch (sortby.toLowerCase()) {
+            case "author":
+                comparator = Comparator.comparing(Book::getAuthor);
+                break;
+            case "price":
+                comparator = Comparator.comparing(Book::getPrice);
+                break;
+            default:
+                comparator = Comparator.comparing(Book::getTitle);
+        }
+
+        if ("desc".equalsIgnoreCase(order)) {
+            comparator = comparator.reversed();
+        }
+
+        List<Book> sorted = filtered.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
+        int start = page * size;
+        int end = Math.min(start + size, sorted.size());
+
+        List<Book> paginated = start >= sorted.size()
+                ? new ArrayList<>()
+                : sorted.subList(start,end);
+
+        Map<String,Object> response = new HashMap<>();
+        response.put("books", paginated);
+        response.put("currentPage", page);
+        response.put("pageSize", size);
+        response.put("totalItems", sorted.size());
+        response.put("totalPages", (int)Math.ceil((double) sorted.size() / size));
+
+        return ResponseEntity.ok(response);
+
+
+    }
+
+<img width="962" height="701" alt="image" src="https://github.com/user-attachments/assets/07803365-b090-4d98-bd75-e83ff476ae89" />
+
+
 
