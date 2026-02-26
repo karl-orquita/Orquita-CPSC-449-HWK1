@@ -55,3 +55,16 @@
     }
 
 <img width="842" height="556" alt="image" src="https://github.com/user-attachments/assets/6e8af3bd-5e20-4ea6-8fe3-0114c1487175" />
+
+# DELETE
+
+    // Delete
+    @DeleteMapping("/books/{id}")
+    public void deleteBOok(@PathVariable Long id) {
+        books.removeIf(book -> book.getId().equals(id));
+    }
+
+<img width="1213" height="606" alt="image" src="https://github.com/user-attachments/assets/fa9078a6-2d91-403d-b5e7-cc4ba2e6adf6" />
+<img width="836" height="585" alt="image" src="https://github.com/user-attachments/assets/acebd002-4052-4164-b6c9-9a5060cc7426" />
+
+
