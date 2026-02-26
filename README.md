@@ -54,8 +54,4 @@
         return book;
     }
 
-
-}```
-
-```
 <img width="842" height="556" alt="image" src="https://github.com/user-attachments/assets/6e8af3bd-5e20-4ea6-8fe3-0114c1487175" />
